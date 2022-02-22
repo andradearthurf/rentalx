@@ -1,17 +1,12 @@
 import express from "express";
 
+import { categoriesRoutes } from "./routes/categories.routes";
+
 const app = express();
 
 app.use(express.json());
 
-app.get("/", (request, response) =>
-  response.json({ message: "Servidor rodando na moral" })
-);
-
-app.post("/courses", (request, response) => {
-  const { name } = request.body;
-
-  return response.json({ name });
-});
+app.use("/categories", categoriesRoutes); // Usando a rota criada em routes.
+// Com isso, todos os métodos POST, GET, etc, serão passados para o nosso server.
 
 app.listen(3333, () => console.log("Server is running!"));
