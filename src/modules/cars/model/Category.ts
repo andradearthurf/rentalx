@@ -1,3 +1,5 @@
+// Modelando nossa entidade, nossa tabela de categorias, passando que dados/
+// atributos a entidade irá receber.
 import { v4 as uuidv4 } from "uuid";
 
 class Category {
