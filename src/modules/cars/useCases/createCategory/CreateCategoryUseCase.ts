@@ -1,8 +1,8 @@
 // As rotas estão com responsabilidades demais dentro delas, com isso iremos
-// criar um novo SERVICE para que, por exemplo a rota post não fique responsável
+// criar um novo SERVICE/useCase para que, por exemplo a rota post não fique responsável
 // pela criação, desviando essa funcionalidade para o service.
 
-import { ICategoriesRepository } from "../repositories/ICategoriesRepository";
+import { ICategoriesRepository } from "../../repositories/ICategoriesRepository";
 
 interface IRequest {
   name: string;
@@ -15,7 +15,7 @@ interface IRequest {
  * - Acessar o repositório
  * - Retornar algo (se possível)
  */
-class CreateCategoryService {
+class CreateCategoryUseCase {
   // Recebendo dentro do constructor do service o apontamento para o CategoriesRepository
   // para acessar as funções implementada la dentro, como create() e findByName().
   constructor(private categoriesRepository: ICategoriesRepository) {}
@@ -38,4 +38,4 @@ class CreateCategoryService {
   }
 }
 
-export { CreateCategoryService };
+export { CreateCategoryUseCase };
