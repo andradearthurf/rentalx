@@ -1,11 +1,12 @@
 // Nossos repositórios serão responsáveis por fazer o acesso ao banco de dados, por fazer
 // o cadastro, insert, select, toda a manipulação com nosso banco de dados!!!
 
-import { Category } from "../model/Category";
+// singleton - padrão de projeto
+import { Category } from "../../model/Category";
 import {
   ICategoriesRepository,
   ICreateCategoryDTO,
-} from "./ICategoriesRepository";
+} from "../ICategoriesRepository";
 
 // DTO - Data transfer object - Criar um objeto responsável pela transferência de dados
 // pela uma classe e outra. De routes para repositories.
@@ -19,9 +20,24 @@ class CategoriesRepository implements ICategoriesRepository {
   // o nosso repositório.
   private categories: Category[]; // Tipando o array.
 
-  constructor() {
+  // Modelo SINGLETON:
+  // eslint-disable-next-line no-use-before-define
+  private static INSTANCE: CategoriesRepository;
+
+  private constructor() {
     this.categories = []; // Trazendo a responsabilidade de criação/inicialização do array,
     // quando criar uma nova instância para a classe, por isso está passando no constructor.
+  }
+
+  // Só vai criar a nova instância se ainda não houver instância, com isso, na
+  // hora que for listar as categories, o array estará preenchido.
+  // O getInstance vai ser responsável por instanciar nossa classe ao retornar
+  // uma instância já existente.
+  public static getInstance(): CategoriesRepository {
+    if (!CategoriesRepository.INSTANCE) {
+      CategoriesRepository.INSTANCE = new CategoriesRepository();
+    }
+    return CategoriesRepository.INSTANCE;
   }
 
   // Vai ser responsável por cadastrar nossa categoria.
