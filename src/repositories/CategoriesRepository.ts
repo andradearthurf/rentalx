@@ -2,17 +2,18 @@
 // o cadastro, insert, select, toda a manipulação com nosso banco de dados!!!
 
 import { Category } from "../model/Category";
+import {
+  ICategoriesRepository,
+  ICreateCategoryDTO,
+} from "./ICategoriesRepository";
 
 // DTO - Data transfer object - Criar um objeto responsável pela transferência de dados
 // pela uma classe e outra. De routes para repositories.
 
-// Criar uma interface para tipar o name e description e passar para o nosso método create().
-interface ICreateCategoryDTO {
-  name: string;
-  description: string;
-}
-
-class CategoriesRepository {
+// Dou um implements para que no arquivo ICategoriesRepository, venha todas as
+// informações dessa classe CategoriesRepository, quando eu passar um create(),
+// por exemplo, dentro da interface.
+class CategoriesRepository implements ICategoriesRepository {
   // Por enquanto a inserção será em um array.
   // Definindo como private, pois só quem vai ter acesso ao categories, será
   // o nosso repositório.

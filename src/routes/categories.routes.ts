@@ -3,6 +3,7 @@
 import { Router } from "express";
 
 import { CategoriesRepository } from "../repositories/CategoriesRepository";
+import { CreateCategoryService } from "../services/CreateCategoryService";
 
 const categoriesRoutes = Router();
 
@@ -14,15 +15,11 @@ categoriesRoutes.post("/", (request, response) => {
   // categories, por isso inserimos tipagem para as categories.
   const { name, description } = request.body;
 
-  const categoryAlreadyExists = categoriesRepository.findByName(name);
+  // A rota agora foi minimizada, fazendo com que a responsabilidade dela seja apenas
+  // executar a rota, igual segue abaixo:
+  const createCategoryService = new CreateCategoryService(categoriesRepository);
 
-  if (categoryAlreadyExists) {
-    return response.status(400).json({ error: "Category Already exists!" });
-  }
-
-  const category = { name, description };
-
-  categoriesRepository.create(category);
+  createCategoryService.execute({ name, description });
 
   return response.status(201).send();
 });
