@@ -41,6 +41,8 @@ class ImportCategoryUseCase {
           });
         })
         .on("end", () => {
+          // Remover o arquivo que já foi lido e inserido no array
+          fs.promises.unlink(file.path);
           resolve(categories);
         })
         .on("error", (err) => {
