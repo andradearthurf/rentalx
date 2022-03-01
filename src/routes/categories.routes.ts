@@ -19,6 +19,8 @@ const upload = multer({
 
 // Nossa categoria recebera um 'name' e um 'description'.
 categoriesRoutes.post("/", (request, response) => {
+  // O createCategoryController virou uma função para realmente só ser chamado
+  // quando o método post fosse requisitado.
   return createCategoryController().handle(request, response);
 });
 
