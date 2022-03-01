@@ -2,7 +2,10 @@
 // o cadastro, insert, select, toda a manipulação com nosso banco de dados!!!
 
 // singleton - padrão de projeto
-import { Category } from "../../model/Category";
+
+import { getRepository, Repository } from "typeorm";
+
+import { Category } from "../../entities/Category";
 import {
   ICategoriesRepository,
   ICreateCategoryDTO,
@@ -15,56 +18,56 @@ import {
 // informações dessa classe CategoriesRepository, quando eu passar um create(),
 // por exemplo, dentro da interface.
 class CategoriesRepository implements ICategoriesRepository {
-  // Por enquanto a inserção será em um array.
-  // Definindo como private, pois só quem vai ter acesso ao categories, será
-  // o nosso repositório.
-  private categories: Category[]; // Tipando o array.
+  private repository: Repository<Category>; // O acesso ao Repository (classe do typeORM)
+  // só poderá ser acessado aqui dentro da classe, por causa do private
 
   // Modelo SINGLETON:
   // eslint-disable-next-line no-use-before-define
-  private static INSTANCE: CategoriesRepository;
+  // private static INSTANCE: CategoriesRepository;
 
-  private constructor() {
-    this.categories = []; // Trazendo a responsabilidade de criação/inicialização do array,
-    // quando criar uma nova instância para a classe, por isso está passando no constructor.
+  constructor() {
+    this.repository = getRepository(Category); // Criar o repositório, ou "pega-lo"
   }
 
   // Só vai criar a nova instância se ainda não houver instância, com isso, na
   // hora que for listar as categories, o array estará preenchido.
   // O getInstance vai ser responsável por instanciar nossa classe ao retornar
   // uma instância já existente.
-  public static getInstance(): CategoriesRepository {
-    if (!CategoriesRepository.INSTANCE) {
-      CategoriesRepository.INSTANCE = new CategoriesRepository();
-    }
-    return CategoriesRepository.INSTANCE;
-  }
+  // public static getInstance(): CategoriesRepository {
+  //   if (!CategoriesRepository.INSTANCE) {
+  //     CategoriesRepository.INSTANCE = new CategoriesRepository();
+  //   }
+  //   return CategoriesRepository.INSTANCE;
+  // }
 
   // Vai ser responsável por cadastrar nossa categoria.
-  create({ description, name }: ICreateCategoryDTO) {
-    // A rota post não deve ter como base a criação do id, se não o id sempre vai ser criado
-    // novamente, e desnecessariamente.
-    // Criando uma nova instância de classe, para que o id seja criado e
-    // passado para dentro do array.
-    const category = new Category(); // Instanciando o objeto category para passar ele dentro do array
+  async create({ description, name }: ICreateCategoryDTO): Promise<void> {
+    // Precisamos criar essa entidade primeiro, com o método create() do typeORM
+    // para conseguir salvar e passar para o banco de dados.
+    const category = this.repository.create({
+      description,
+      name,
+      // Agora quem cria o created_at é o nosso banco com "now()"
+    });
 
-    // Criando todos os atributos de uma forma simplificada, ao invés de fazer:
-    // category.name = name; category.description = description; etc.
-    Object.assign(category, { name, description, created_at: new Date() });
-
-    this.categories.push(category); // INSERINDO dentro do array.
+    // Temos que usar o await para esperar que a linha de cima ocorra para finalizar
+    // o nosso método
+    await this.repository.save(category);
   }
 
   // Imprimindo as nossas categorias.
-  list(): Category[] {
-    return this.categories;
+  async list(): Promise<Category[]> {
+    const categories = await this.repository.find(); // esse find() do Repository retornará
+    // para nós uma lista.
+    return categories;
   }
 
   // Validando categorias, isto é, verificando se há uma categoria com o nome igual.
-  findByName(name: string): Category {
+  async findByName(name: string): Promise<Category> {
     // Fazendo um find para buscar e retonar o objeto, verificando se há uma categoria
     // com o nome já existente
-    const category = this.categories.find((category) => category.name === name);
+    // Fazendo um "WHERE":
+    const category = await this.repository.findOne({ name });
     return category;
   }
 }

@@ -21,9 +21,11 @@ class CreateCategoryUseCase {
   constructor(private categoriesRepository: ICategoriesRepository) {}
 
   // Vai fazer tudo que o create() vai fazer, aqui dentro e depois passamos para a rota.
-  execute({ name, description }: IRequest): void {
+  async execute({ name, description }: IRequest): Promise<void> {
     // Código que estava na rota post: --------------------------------
-    const categoryAlreadyExists = this.categoriesRepository.findByName(name);
+    const categoryAlreadyExists = await this.categoriesRepository.findByName(
+      name
+    );
 
     if (categoryAlreadyExists) {
       // O service não reconhece o response nem request, logo para gerar erro,
