@@ -2,6 +2,8 @@
 // criar um novo SERVICE/useCase para que, por exemplo a rota post não fique responsável
 // pela criação, desviando essa funcionalidade para o service.
 
+import { inject, injectable } from "tsyringe";
+
 import { ICategoriesRepository } from "../../repositories/ICategoriesRepository";
 
 interface IRequest {
@@ -15,10 +17,14 @@ interface IRequest {
  * - Acessar o repositório
  * - Retornar algo (se possível)
  */
+@injectable()
 class CreateCategoryUseCase {
   // Recebendo dentro do constructor do service o apontamento para o CategoriesRepository
   // para acessar as funções implementada la dentro, como create() e findByName().
-  constructor(private categoriesRepository: ICategoriesRepository) {}
+  constructor(
+    @inject("CategoriesRepository") // Injeção de dependência, e instância com o new(), já que o tsyringe já faz isso.
+    private categoriesRepository: ICategoriesRepository
+  ) {}
 
   // Vai fazer tudo que o create() vai fazer, aqui dentro e depois passamos para a rota.
   async execute({ name, description }: IRequest): Promise<void> {

@@ -3,9 +3,9 @@
 import { Router } from "express";
 import multer from "multer";
 
-import createCategoryController from "../modules/cars/useCases/createCategory/index";
-import { importCategoryController } from "../modules/cars/useCases/importCategory";
-import { listCategoryController } from "../modules/cars/useCases/listCategories";
+import { CreateCategoryController } from "../modules/cars/useCases/createCategory/CreateCategoryController";
+import { ImportCategoryController } from "../modules/cars/useCases/importCategory/ImportCategoryController";
+import { ListCategoriesController } from "../modules/cars/useCases/listCategories/ListCategoriesController";
 
 const categoriesRoutes = Router();
 
@@ -15,22 +15,24 @@ const upload = multer({
   dest: "./tmp",
 });
 
-// const categoriesRepository = new CategoriesRepository(); // Instanciando a classe, logo categoriesRepository terá todos os métodos da classe.
+// Nosso controller agora irá funcionar exatamente como um middleware
+const createCategoryController = new CreateCategoryController();
+const importCategoryController = new ImportCategoryController();
+const listCategoriesController = new ListCategoriesController();
+
+// const categoriesRepository = new CategoriesRepository();
+// Instanciando a classe, logo categoriesRepository terá todos os métodos da classe.
 
 // Nossa categoria recebera um 'name' e um 'description'.
-categoriesRoutes.post("/", (request, response) => {
-  // O createCategoryController virou uma função para realmente só ser chamado
-  // quando o método post fosse requisitado.
-  return createCategoryController().handle(request, response);
-});
+categoriesRoutes.post("/", createCategoryController.handle);
 
-categoriesRoutes.get("/", (request, response) => {
-  return listCategoryController.handle(request, response);
-});
+categoriesRoutes.get("/", listCategoriesController.handle);
 
 // Upload de apenas 1 arquivo
-categoriesRoutes.post("/import", upload.single("file"), (request, response) => {
-  return importCategoryController.handle(request, response);
-});
+categoriesRoutes.post(
+  "/import",
+  upload.single("file"),
+  importCategoryController.handle
+);
 
 export { categoriesRoutes };
