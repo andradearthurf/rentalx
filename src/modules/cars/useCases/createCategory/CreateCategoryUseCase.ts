@@ -4,6 +4,7 @@
 
 import { inject, injectable } from "tsyringe";
 
+import { AppError } from "../../../../errors/AppError";
 import { ICategoriesRepository } from "../../repositories/ICategoriesRepository";
 
 interface IRequest {
@@ -36,7 +37,7 @@ class CreateCategoryUseCase {
     if (categoryAlreadyExists) {
       // O service não reconhece o response nem request, logo para gerar erro,
       // é feito da seguinte forma:
-      throw new Error("Category already exists!");
+      throw new AppError("Category already exists!");
     }
 
     const category = { name, description };
