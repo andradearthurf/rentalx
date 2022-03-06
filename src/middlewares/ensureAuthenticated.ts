@@ -35,10 +35,16 @@ export async function ensureAuthenticated(
 
     const usersRepository = new UsersRepository(); // instanciando a classe para usar os métodos
     const user = await usersRepository.findById(user_id);
+    // EU verifico se o token realmente existe, isto é, se o token é de algum usuário existente
+    // no nosso banco de dados. E esse 'sub' é o id que o jwt possui.
 
     if (!user) {
       throw new AppError("User does not exists!", 401);
     }
+
+    request.user = {
+      id: user_id,
+    };
 
     next();
   } catch (error) {
