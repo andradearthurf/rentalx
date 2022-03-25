@@ -1,8 +1,8 @@
 import { NextFunction, Request, Response } from "express";
 import { verify } from "jsonwebtoken";
 
-import { AppError } from "../errors/AppError";
-import { UsersRepository } from "../modules/accounts/repositories/implementations/UsersRepository";
+import { UsersRepository } from "@modules/accounts/infra/typeorm/repositories/UsersRepository";
+import { AppError } from "@shared/errors/AppError";
 
 // Esse arquivo irá ser responsável por ser um middleware de autenticação de rotas,
 // isto é, verificar se o usuário que está acessando nossa rota é um usuário autenticado.

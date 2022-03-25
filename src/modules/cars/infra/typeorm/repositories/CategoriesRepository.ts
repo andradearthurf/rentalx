@@ -5,11 +5,12 @@
 
 import { getRepository, Repository } from "typeorm";
 
-import { Category } from "../../entities/Category";
 import {
   ICategoriesRepository,
   ICreateCategoryDTO,
-} from "../ICategoriesRepository";
+} from "@modules/cars/repositories/ICategoriesRepository";
+
+import { Category } from "../entities/Category";
 
 // DTO - Data transfer object - Criar um objeto responsável pela transferência de dados
 // pela uma classe e outra. De routes para repositories.
