@@ -2,7 +2,7 @@ import { parse } from "csv-parse";
 import fs from "fs"; // Conceito de stream para a leitura dos nossos files.
 import { inject, injectable } from "tsyringe";
 
-import { ICategoriesRepository } from "../../repositories/ICategoriesRepository";
+import { ICategoriesRepository } from "@modules/cars/repositories/ICategoriesRepository";
 
 interface IImportCategory {
   name: string;
