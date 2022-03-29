@@ -1,6 +1,7 @@
 import { Router } from "express";
 
 import { authenticateRoutes } from "./authenticate.routes";
+import { carsRoutes } from "./cars.routes";
 import { categoriesRoutes } from "./categories.routes";
 import { specificationsRoutes } from "./specifications.routes";
 import { usersRoutes } from "./users.routes";
@@ -13,6 +14,8 @@ router.use("/categories", categoriesRoutes); // Usando a rota criada em routes.
 router.use("/specifications", specificationsRoutes);
 
 router.use("/users", usersRoutes);
+
+router.use("/cars", carsRoutes);
 
 router.use(authenticateRoutes); // sem o ptah, fica tudo pra dentro das /sessions
 
