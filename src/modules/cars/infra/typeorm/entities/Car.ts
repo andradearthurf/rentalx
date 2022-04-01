@@ -7,9 +7,11 @@ import {
   ManyToOne,
   ManyToMany,
   JoinTable,
+  OneToMany,
 } from "typeorm";
 import { v4 as uuidv4 } from "uuid";
 
+import { CarImage } from "./CarImage";
 import { Category } from "./Category";
 import { Specification } from "./Specification";
 
@@ -53,6 +55,9 @@ class Car {
     inverseJoinColumns: [{ name: "specification_id" }],
   })
   specifications: Specification[];
+
+  @OneToMany(() => CarImage, (car_image) => car_image.car)
+  car_image: CarImage[];
 
   @CreateDateColumn()
   created_at: Date;
