@@ -15,7 +15,7 @@ class RentalsRepositoryInMemory implements IRentalsRepository {
   async findOpenRentalByUser(user_id: string): Promise<Rental> {
     return this.rentals.find(
       (rental) => rental.user_id === user_id && !rental.end_date
-    ); // ver se o usuário é um usuário cadastrado e se tem não tem nenhum carro alugado
+    ); // ver se o usuário é um usuário cadastrado e se não tem nenhum carro alugado pelo usuário
     // "!rental.end_date"
   }
 
