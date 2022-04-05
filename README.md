@@ -83,6 +83,8 @@ Não deve ser possível cadastrar um novo aluguel caso já exista um aberto para
 
 Não deve ser possível cadastrar um novo aluguel caso já exista um aberto para o mesmo carro.
 
+O Usuário deve estar logado na aplicação.
+
 
 ##
 
